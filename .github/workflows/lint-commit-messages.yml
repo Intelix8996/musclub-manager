@@ -1,0 +1,32 @@
+name: Lint commit messages
+
+on: [push, pull_request]
+
+jobs:
+  commitlint:
+    name: Lint commit messages with commitlint
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install commitlint
+        run: |
+          npm install @commitlint/config-conventional
+          npm install @commitlint/cli
+          npm install conventional-changelog-conventionalcommits
+
+      - name: Validate current commit (last commit) with commitlint
+        if: github.event_name == 'push'
+        run: npx commitlint -x @commitlint/config-conventional --last --verbose
+
+      - name: Validate PR commits with commitlint
+        if: github.event_name == 'pull_request'
+        run: npx commitlint -x @commitlint/config-conventional --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
