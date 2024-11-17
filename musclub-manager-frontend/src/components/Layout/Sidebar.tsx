@@ -8,8 +8,10 @@ import NodesLeftIcon from '@gravity-ui/icons/svgs/nodes-left.svg';
 
 import MusclubIcon from '../../assets/logo.svg';
 
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { usePathname, useRouter } from 'next/navigation';
+
 import { AsideHeader, LogoProps, MenuItem, SubheaderMenuItem } from "@gravity-ui/navigation";
-import { usePathname } from 'next/navigation';
 
 const asideLogo: LogoProps = {text: "Musclub Manager", icon: MusclubIcon};
 
@@ -23,24 +25,33 @@ const asideSubheaderItems: SubheaderMenuItem[] = [
     }
 ]
 
-const asideMenuItems: MenuItem[] = [
+type MenuItemWithRoute = MenuItem & {
+    route: string,
+}
+
+const asideMenuItems: MenuItemWithRoute[] = [
     {
         id: "membersButton",
         title: "Members",
         icon: PersonsIcon,
-        link: "/members"
+
+        route: "/members",
     },
     {
         id: "eventsButton",
         title: "Events",
         icon: CalendarIcon,
-        link: "/events"
+
+        route: "/events",
     }
 ];
 
-function generateAsideMenuItems(pathname: string): MenuItem[] {
+function generateAsideMenuItems(pathname: string, router: AppRouterInstance): MenuItem[] {
     return asideMenuItems.map(item => {
-        item.current = pathname === item.link;
+        item.current = pathname === item.route;
+        item.onItemClick = () => {
+            router.push(item.route);
+        }
 
         return item;
     });
@@ -48,7 +59,9 @@ function generateAsideMenuItems(pathname: string): MenuItem[] {
 
 export const Sidebar = ({children}: {children: React.ReactNode}) => {
     const [compact, setCompact] = React.useState<boolean>(false);
+
     const pathname = usePathname();
+    const router = useRouter();
     
     return (
         <AsideHeader
@@ -57,7 +70,7 @@ export const Sidebar = ({children}: {children: React.ReactNode}) => {
 
             logo={asideLogo}
             // subheaderItems={asideSubheaderItems} // Causes hydratation error
-            menuItems={generateAsideMenuItems(pathname)}
+            menuItems={generateAsideMenuItems(pathname, router)}
 
             renderContent={() => {
                 return children;
