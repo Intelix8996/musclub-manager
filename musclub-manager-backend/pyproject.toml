@@ -3,7 +3,7 @@ name = "musclub-manager-backend"
 version = "0.1.0"
 description = "Backend for musclub-manager"
 authors = ["cjvth <vuki03@mail.ru>"]
-readme = "README.md"
+# readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"

@@ -16,7 +16,7 @@ load_dotenv()
 
 app = FastAPI()
 
-engine = create_async_engine(f"postgresql+asyncpg://{os.environ["DB_URL"]}", echo=True)
+engine = create_async_engine(f"postgresql+asyncpg://{os.environ['DB_URL']}", echo=True)
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 
