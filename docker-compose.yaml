@@ -1,0 +1,9 @@
+services:
+  backend:
+    image: musclub-manager/backend
+    pull_policy: build
+    build: ./musclub-manager-backend
+    container_name: musclub-manager-backend
+    env_file: .env
+    ports:
+      - "8011:8080"
