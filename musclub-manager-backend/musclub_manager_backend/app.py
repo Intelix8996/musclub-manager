@@ -2,6 +2,7 @@ import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRoute
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import selectinload
@@ -35,7 +36,7 @@ async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 
 @app.get("/members")
-async def members() -> MembersResponse:
+async def list_members_brief() -> MembersResponse:
     async with (async_session() as session):
         result = select(Member).options(selectinload(Member.specialisations), selectinload(Member.instruments))
         result = await session.scalars(result)
@@ -82,3 +83,12 @@ async def members(member_id: int) -> MemberResponse:
                 notes=result.notes,
             )
         )
+
+
+def use_route_names_as_operation_ids(app: FastAPI) -> None:
+    for route in app.routes:
+        if isinstance(route, APIRoute):
+            route.operation_id = route.name
+
+
+use_route_names_as_operation_ids(app)
