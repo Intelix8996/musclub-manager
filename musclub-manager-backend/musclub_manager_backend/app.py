@@ -41,14 +41,16 @@ async def members() -> MembersResponse:
         result = await session.scalars(result)
 
         return MembersResponse(
-            members={
-                i.id: MemberBrief(full_name=i.full_name,
-                                  status=i.status,
-                                  specialisations={j.id: SpecialisationFull(title=j.title) for j in i.specialisations},
-                                  instruments={j.id: InstrumentFull(title=j.title) for j in i.instruments},
-                                  )
+            members=[
+                MemberBrief(
+                    id=i.id,
+                    full_name=i.full_name,
+                    status=i.status,
+                    specialisations=[SpecialisationFull(id=j.id, title=j.title) for j in i.specialisations],
+                    instruments=[InstrumentFull(id=j.id, title=j.title) for j in i.instruments],
+                )
                 for i in result
-            }
+            ]
         )
 
 
@@ -67,13 +69,14 @@ async def members(member_id: int) -> MemberResponse:
 
         return MemberResponse(
             member=MemberFull(
+                id=member_id,
                 full_name=result.full_name,
                 photo_url=result.photo_url,
                 telegram=result.telegram,
                 socials=result.socials,
                 status=result.status,
-                specialisations={j.id: SpecialisationFull(title=j.title) for j in result.specialisations},
-                instruments={j.id: InstrumentFull(title=j.title) for j in result.instruments},
+                specialisations=[SpecialisationFull(id=j.id, title=j.title) for j in result.specialisations],
+                instruments=[InstrumentFull(id=j.id, title=j.title) for j in result.instruments],
                 repertoire=result.repertoire,
                 band_structure=result.band_structure,
                 notes=result.notes,
