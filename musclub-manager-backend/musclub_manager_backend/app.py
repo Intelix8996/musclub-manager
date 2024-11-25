@@ -56,7 +56,7 @@ async def list_members_brief() -> MembersResponse:
 
 
 @app.get("/member/{member_id}")
-async def members(member_id: int) -> MemberResponse:
+async def get_member(member_id: int) -> MemberResponse:
     async with (async_session() as session):
         stmt = select(Member).where(Member.id == member_id).options(selectinload(Member.specialisations),
                                                                     selectinload(Member.instruments))
