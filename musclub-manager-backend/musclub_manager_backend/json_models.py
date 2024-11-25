@@ -11,6 +11,11 @@ class InstrumentFull(BaseModel):
     title: str
 
 
+class Social(BaseModel):
+    service: str
+    username: str
+
+
 class MemberBrief(BaseModel):
     id: int
     full_name: str
@@ -28,7 +33,7 @@ class MemberFull(BaseModel):
     full_name: str
     photo_url: str | None
     telegram: str | None
-    socials: dict[str, str]
+    socials: list[Social]
     status: str
     specialisations: list[SpecialisationFull]
     instruments: list[InstrumentFull]

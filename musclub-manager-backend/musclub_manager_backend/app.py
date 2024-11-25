@@ -10,7 +10,7 @@ from starlette.status import HTTP_404_NOT_FOUND
 
 from musclub_manager_backend.db_models import Member
 from musclub_manager_backend.json_models import MemberBrief, MembersResponse, SpecialisationFull, InstrumentFull, \
-    MemberResponse, MemberFull
+    MemberResponse, MemberFull, Social
 
 from dotenv import load_dotenv
 
@@ -68,13 +68,15 @@ async def get_member(member_id: int) -> MemberResponse:
                 detail=f'Member with id {member_id} not found',
             )
 
+        socials: dict[str, str] = result.socials
+
         return MemberResponse(
             member=MemberFull(
                 id=member_id,
                 full_name=result.full_name,
                 photo_url=result.photo_url,
                 telegram=result.telegram,
-                socials=result.socials,
+                socials=[Social(service=i, username=j) for i, j in socials.items()],
                 status=result.status,
                 specialisations=[SpecialisationFull(id=j.id, title=j.title) for j in result.specialisations],
                 instruments=[InstrumentFull(id=j.id, title=j.title) for j in result.instruments],
