@@ -5,7 +5,25 @@ type BreadcrumbFormatter = (item: string) => string;
 
 const breadcrumbsFormatters: BreadcrumbFormatter[] = [
     (item) => {
-        return item.toUpperCase();
+        switch (item) {
+            case "members":
+                return "Участники";
+            case "events":
+                return "Мероприятия"
+            default:
+                return item;
+        }
+    },
+    (item) => {
+        return item;
+    },
+    (item) => {
+        switch (item) {
+            case "edit":
+                return "Редактирование";
+            default:
+                return item;
+        }
     },
 ];
 
