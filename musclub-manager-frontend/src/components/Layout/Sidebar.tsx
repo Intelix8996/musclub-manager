@@ -32,14 +32,14 @@ type MenuItemWithRoute = MenuItem & {
 const asideMenuItems: MenuItemWithRoute[] = [
     {
         id: "membersButton",
-        title: "Members",
+        title: "Участники",
         icon: PersonsIcon,
 
         route: "/members",
     },
     {
         id: "eventsButton",
-        title: "Events",
+        title: "Мероприятия",
         icon: CalendarIcon,
 
         route: "/events",
